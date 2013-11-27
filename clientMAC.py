@@ -3,9 +3,14 @@
 import socket
 import sqlite3
 import os
+import sys
+
+if len(sys.argv)>3 or len(sys.argv)<3:
+	print "Usage: python clientMAC.py <ip address> <port number>"
+	exit(1)
 
 #DB communication initialization
-conn = sqlite3.connect('~/moe/mac.db')
+conn = sqlite3.connect(os.path.dirname(os.path.abspath(__file__))+'/mac.db')
 curs = conn.cursor()
 
 def update_db(mac_addr, value):
@@ -41,8 +46,8 @@ def are_you_alive(ip_addr, mac_addr):
         update_db(mac_addr, value)    
 
 #address and port
-host = socket.gethostbyname("160.80.101.36")
-port = 3617
+host = socket.gethostbyname(sys.argv[1])
+port = int(sys.argv[2])
 
 #socket initialization
 for res in socket.getaddrinfo(host, port, socket.AF_INET, socket.SOCK_STREAM):

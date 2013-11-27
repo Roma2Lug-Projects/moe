@@ -14,7 +14,6 @@ Installation:
 - Place and compile the server in C-language into the router and make it
 start setted to port 3617
 - Populate db with user's information (MAC, Name, Presence value( 0 or 1 ))
-- Start the python script with "python clientMAC.py" (set the ip in the code)
-N.B.: the db has to be placed in the same directory of the script, that
-has to be placed in your home directory (to be modified in future)
+- Start the python script with "python clientMAC.py <ip addr> <port>"
+N.B.: the db has to be placed in the same directory of the script
 - Place where you want your whoisin.php code and enjoy!
