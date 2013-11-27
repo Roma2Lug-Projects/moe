@@ -1,0 +1,20 @@
+MOE: Roma2LUG Presence Check-In Service
+
+Description:
+MOE is an application client-server that, with a Linux 
+Based router with DHCP, it checks if a person, associated to his MAC Address, 
+is connected at your Network.
+
+Requirement:
+- A Linux Based router with DHCP (with address of type XXX:XXX:X:XXX(to be modified))
+- sqlite3
+- python
+
+Installation:
+- Place and compile the server in C-language into the router and make it
+start setted to port 3617
+- Populate db with user's information (MAC, Name, Presence value( 0 or 1 ))
+- Start the python script with "python clientMAC.py" (set the ip in the code)
+N.B.: the db has to be placed in the same directory of the script, that
+has to be placed in your home directory (to be modified in future)
+- Place where you want your whoisin.php code and enjoy!
