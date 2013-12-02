@@ -33,6 +33,7 @@ def receive_msg(sock):
     msg = ""
     ret_msg = ""
     
+    #receiving 1 char per time
     while msg not in ("x", "y", "z"):
         msg = sock.recv(1)
         #error check
@@ -40,12 +41,14 @@ def receive_msg(sock):
             print "Errore in invio dati da server!\n"
             exit(1)
         ret_msg = ret_msg + msg
-        #print ret_msg
-    #print "La funzione esce"
     return ret_msg
     
 def are_you_alive(ip_addr, mac_addr):
     #ping with Linux ping
+    
+    curs.execute("select * from mac where macno=\'"+mac_addr.upper()+"\'")
+    rs = curs.fetchone()
+    print rs
     print "Pinging "+ip_addr+"..."
     value = 0
     ans = os.system("ping "+ip_addr+" -c 2 -t 40 > /dev/null")
@@ -93,32 +96,17 @@ i=0
 while msg!="z":
     
     msg = receive_msg(sock)
-    #msg = sock.recv(size)
-    #error check
-    #if msg=="h":
-    #    print "Errore in invio dati da server!\n"
-    #    exit(1)
+    
     if msg!="z":
-        #print "Sono dentro"
-        #ip received
-        #mac received
+		#ip received
         if msg[-1]=="x":
             ip = msg.split("x")
+        #mac received
         elif msg[-1]=="y":
             mac = msg.split("y")    
         if (ip!= "" and mac!=""):
             if(ip!="" and check_db(mac[0])==1):
                 are_you_alive(ip[0],mac[0])
-    #print "Non sono entrato"
-    #elif msg!="z" and msg!="":
-    #    #ip received
-    #    if msg[-1]=="x":
-    #        ip = msg.split("x")
-        #mac received
-    #    elif msg[-1]=="y":
-    #        mac = msg.split("y")
-    #        if(ip!="" and check_db(mac[0])==1):
-    #            are_you_alive(ip[0],mac[0])
 
 #socket closure
 sock.close()
