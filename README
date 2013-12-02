@@ -6,7 +6,7 @@ Based router with DHCP, it checks if a person, associated to his MAC Address,
 is connected at your Network.
 
 Requirement:
-- A Linux Based router with DHCP (with address of type XXX:XXX:X:XXX(to be modified))
+- A Linux Based router with DHCP
 - sqlite3
 - python
 
