@@ -26,6 +26,23 @@ def check_db(mac_addr):
         return 1
     else:
         return 0
+
+
+def receive_msg(sock):
+    #temporary variable for msg received
+    msg = ""
+    ret_msg = ""
+    
+    while msg not in ("x", "y", "z"):
+        msg = sock.recv(1)
+        #error check
+        if msg=='h':
+            print "Errore in invio dati da server!\n"
+            exit(1)
+        ret_msg = ret_msg + msg
+        #print ret_msg
+    #print "La funzione esce"
+    return ret_msg
     
 def are_you_alive(ip_addr, mac_addr):
     #ping with Linux ping
@@ -65,7 +82,7 @@ for res in socket.getaddrinfo(host, port, socket.AF_INET, socket.SOCK_STREAM):
         exit(1)
 
 #temporary variable for msg received
-msg = ""
+msg = "None"
 
 #dictionary for mac->ip memorization
 msg_final = {}
@@ -74,26 +91,34 @@ ip = ""
 mac =  ""
 i=0
 while msg!="z":
-    if i%2==0:
-        size = 14
-    else:
-        size = 18
-    i=i+1
-    msg = sock.recv(size)
-    #error check
-    if msg=="h":
-        print "Errore in invio dati da server!\n"
-        exit(1)
     
-    elif msg!="z":
+    msg = receive_msg(sock)
+    #msg = sock.recv(size)
+    #error check
+    #if msg=="h":
+    #    print "Errore in invio dati da server!\n"
+    #    exit(1)
+    if msg!="z":
+        #print "Sono dentro"
         #ip received
+        #mac received
         if msg[-1]=="x":
             ip = msg.split("x")
-        #mac received
         elif msg[-1]=="y":
-            mac = msg.split("y")
+            mac = msg.split("y")    
+        if (ip!= "" and mac!=""):
             if(ip!="" and check_db(mac[0])==1):
                 are_you_alive(ip[0],mac[0])
+    #print "Non sono entrato"
+    #elif msg!="z" and msg!="":
+    #    #ip received
+    #    if msg[-1]=="x":
+    #        ip = msg.split("x")
+        #mac received
+    #    elif msg[-1]=="y":
+    #        mac = msg.split("y")
+    #        if(ip!="" and check_db(mac[0])==1):
+    #            are_you_alive(ip[0],mac[0])
 
 #socket closure
 sock.close()
