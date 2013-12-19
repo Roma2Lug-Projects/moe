@@ -1,0 +1,37 @@
+#!/bin/sh
+
+### BEGIN INIT INFO
+# Provides:        isc-dhcp-server
+# Required-Start:  $remote_fs $network $syslog
+# Required-Stop:   $remote_fs $network $syslog
+# Should-Start:	   $local_fs slapd $named
+# Should-Stop:	   $local_fs slapd
+# Default-Start:   2 3 4 5
+# Default-Stop:    0 1 6
+# Short-Description: Start MOE DHCP daemon
+### END INIT INFO
+
+PATH=/sbin:/bin:/usr/sbin:/usr/bin
+
+CONFIG_FILE=/etc/dhcp/dhcpd.conf
+LEASES_FILE=/var/lib/dhcp/dhcpd.leases
+case $1 in
+	start)
+		export MOE_CONNECTOR_PATH=/root/moe-sender/moe-sender
+		export RECEIVER_ADDRESS=192.168.1.2
+		export RECEIVER_PORT=5193	
+		/bin/rm -Rf $LEASES_FILE;
+		/usr/bin/touch $LEASES_FILE;
+		/usr/local/sbin/dhcpd -lf $LEASES_FILE -cf $CONFIG_FILE
+	;;
+	stop)
+		pkill dhcpd
+  		;;
+	restart)
+		$0 stop && sleep 2 && $0 start
+  		;;
+	*)
+		echo "Usage: $0 {start|stop|restart}"
+		exit 2
+		;;
+esac
