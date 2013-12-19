@@ -70,7 +70,9 @@ void thread_receiver(void *sock)
 {
 	int n, fd, connsd, err;
 	char *mac_address;
-	int delta_time;
+	int64_t delta_time;
+	int64_t lease_time;
+	int64_t time_now;
 	struct timeval timeout;
 	char *query;
 	sqlite3_stmt *statement;
@@ -87,7 +89,7 @@ void thread_receiver(void *sock)
 		exit(EXIT_FAILURE);
 	}
 
-	if ((n = readn(connsd, &delta_time, sizeof(long))) != sizeof(long)) {
+	if ((n = readn(connsd, &delta_time, sizeof(int64_t))) != sizeof(int64_t)) {
 		fprintf(stderr, "Error in readn\n");
 		exit(EXIT_FAILURE);
 	}
@@ -124,7 +126,10 @@ void thread_receiver(void *sock)
 		exit(EXIT_FAILURE);
 	}
 	
-	if (sqlite3_bind_int(statement, 1, (time(NULL) + delta_time)) != SQLITE_OK) {
+	time_now = (int64_t)time(NULL);
+	lease_time = delta_time + time_now;
+
+	if (sqlite3_bind_int64(statement, 1, (sqlite3_int64)lease_time) != SQLITE_OK) {
 		fprintf(stderr, "Error in sqlite3_bind_blob: %s\n", sqlite3_errmsg(database));
 		exit(EXIT_FAILURE);
 	}
