@@ -72,10 +72,13 @@ Sostituendo il path /home/roma2lug/moe-receiver/moe-receiver con il path del fil
 Assicurarsi di avere installato uno web-server e di avere installato e abilitato il modulo php. Nel nostro caso ci siamo affidati ad Apache con PHP5.
 Spostare il file moe.php nella stessa directory in cui si trova moe-receiver.
 Collegate il vostro web-server al file moe.php, se utilizzate Apache vi basterà un link simbolico in /var/www:
-	cd /var/www
-	sudo ln -s "path del file moe.php"
 
-WIDGET.PHP
+```shell
+cd /var/www
+sudo ln -s "path del file moe.php"
+```
+
+### WIDGET.PHP
 Come per moe.php spostare o linkare il file al vostro web-server. Nel nostro caso abbiamo utilizzato il codice php del file widget.php come widget in un sito gestito dal CMS Wordpress grazie al [Plugin PHP Code Widget](http://wordpress.org/plugins/php-code-widget/).
 
 Il nostro widget funzionante lo trovate come primo widget nella colonna di destra del nostro sito:
